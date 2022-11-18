@@ -1,15 +1,15 @@
 {
   "private": true,
   "scripts": {
+    "dev": "nuxt dev",
     "build": "nuxt build",
-    "dev": "HOST=0.0.0.0 nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
     "@nuxt/ui": "^0.3.3",
-    "@nuxtjs/apollo": "^5.0.0-alpha.1",
-    "nuxt": "3.0.0-rc.11"
+    "@nuxtjs/apollo": "^5.0.0-alpha.4",
+    "nuxt": "latest"
   }
 }
