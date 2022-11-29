@@ -37,7 +37,6 @@
 </template>
 
 <script lang="ts" setup>
-import gql from 'graphql-tag';
 import type { ViewerT, DiscussionT } from '~/types';
 import discussions from '~/queries/discussions.gql';
 

@@ -20,7 +20,6 @@
 </template>
 
 <script lang="ts" setup>
-import gql from 'graphql-tag';
 // @ts-ignore
 import queryLaunches from '~/queries/launches.gql';
 
