@@ -1,43 +1,62 @@
 <template>
-  <div flex flex-col gap-4>
-    <NCard p-4>
-      <div class="n-header-upper">StarLink Example</div>
+  <div class="flex flex-col gap-4">
+    <UCard class="p-4">
+      <div class="n-header-upper">
+        StarLink Example
+      </div>
 
       <div class="flex flex-wrap gap-3 items-center">
-        <NButton @click="getShips"> Load Ships </NButton>
+        <UButton @click="refresh">
+          Load Ships
+        </UButton>
 
-        <NButton @click="getLaunches"> Load Launches </NButton>
+        <UButton @click="getLaunches">
+          Load Launches
+        </UButton>
       </div>
-    </NCard>
+    </UCard>
 
-    <NCard p-4>
-      <div class="n-header-upper">Raw Output</div>
+    <UCard class="p-4">
+      <div class="mb-4">
+        <label for="limit" class="mr-2">Limit:</label>
+        <input v-model.number="limit" class="w-10" type="number" min="1">
+      </div>
 
-      <p v-if="loading">loading...</p>
-      <pre v-else>{{ result }}</pre>
-    </NCard>
+      <div>
+        Raw Output
+      </div>
+
+      <p v-if="pending">
+        loading...
+      </p>
+      <pre v-else>{{ data }}</pre>
+    </UCard>
   </div>
 </template>
 
 <script lang="ts" setup>
 // @ts-ignore
-import queryLaunches from '~/queries/launches.gql';
+import queryLaunches from '~/queries/launches.gql'
 
-const queryShips = gql`query ships { ships { id name } }`;
+const queryShips = gql`
+  query ships($limit: Int! = 2) {
+    ships(limit: $limit) {
+      id
+      name
+    }
+  }
+`
 
-const { result, restart, loading } = useQuery(queryShips);
+const limit = ref(2)
 
-const getShips = () => restart();
+const { data, refresh, pending } = await useAsyncQuery(queryShips, { limit })
 
-const {
-  load,
-  onError,
-  refetch,
-  result: launchResult,
-} = useLazyQuery(queryLaunches);
-watch(launchResult, (v) => (result.value = v));
+const { load, onError, refetch, result: launchResult } = useLazyQuery(queryLaunches, undefined, {
+  fetchPolicy: 'no-cache'
+})
+watch(launchResult, v => (data.value = v))
+// eslint-disable-next-line no-console
+onError(e => console.error(e))
 
-onError((e) => console.error(e));
-
-const getLaunches = () => (!launchResult.value ? load() : refetch());
+const getLaunches = () => !launchResult.value ? load() : refetch()
 </script>

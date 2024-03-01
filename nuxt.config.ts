@@ -1,10 +1,11 @@
-// https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
+  devtools: { enabled: true },
+
   modules: ['@nuxt/ui', '@nuxtjs/apollo'],
 
   colorMode: {
-    preference: 'light',
-    storageKey: 'na-color-scheme',
+    preference: 'dark',
+    storageKey: 'na-color-scheme'
   },
 
   apollo: {
@@ -12,17 +13,22 @@ export default defineNuxtConfig({
       default: './apollo/default.ts',
       github: {
         httpEndpoint: 'https://api.github.com/graphql',
-        tokenStorage: 'localStorage',
+        tokenStorage: 'cookie'
       },
       todos: {
         httpEndpoint: 'https://nuxt-gql-server-2gl6xp7kua-ue.a.run.app/query',
         wsEndpoint: 'wss://nuxt-gql-server-2gl6xp7kua-ue.a.run.app/query',
+        defaultOptions: {
+          watchQuery: {
+            fetchPolicy: 'cache-and-network'
+          }
+        },
         httpLinkOptions: {
           headers: {
-            'X-CUSTOM-HEADER': '123',
-          },
-        },
-      },
-    },
-  },
-});
+            'X-CUSTOM-HEADER': '123'
+          }
+        }
+      }
+    }
+  }
+})
